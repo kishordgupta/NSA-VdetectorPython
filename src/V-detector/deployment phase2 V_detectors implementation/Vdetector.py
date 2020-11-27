@@ -3,6 +3,20 @@ import numpy as np
 import random
 from tqdm import tqdm
 
+
+def p_root(value, root): 
+      
+    root_value = 1 / float(root) 
+    return round (Decimal(value) **
+             Decimal(root_value), 3) 
+  
+def minkowski_distance(x, y, p_value): 
+      
+    # pass the p_root function to calculate 
+    # all the value of vector parallely  
+    return (p_root(sum(pow(abs(a-b), p_value) 
+            for a, b in zip(x, y)), p_value)) 
+
 pd.set_option('display.expand_frame_repr', False)
 file = "Training.csv"
 
@@ -30,7 +44,7 @@ pbar = tqdm(total=N, initial = 0, desc= "Generating detectors!") # progress-bar
 
 while counter < N:
 	detector = gen_detectors()
-	distance_list = list(euc_distance(data, detector)) # calculates in a large array
+	distance_list = list(minkowski_distance(data, detector,8)) # calculates in a large array
 	dmin = np.min(distance_list) # calculates the minimum distance between current detector and all the data
 	detector_radius = dmin-radius_self # minus away the radius_self to ensure it doesnt overlap
 	if dmin > radius_self:
